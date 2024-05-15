@@ -55,23 +55,23 @@ public class SlotBehaviour : MonoBehaviour
 
     [Header("Animated Sprites")]
     [SerializeField]
-    private Sprite[] Bonus_Sprite;
+    private Sprite[] Monkey_Sprite;
     [SerializeField]
     private Sprite[] Banana_Sprite;
     [SerializeField]
+    private Sprite[] Uncle_Sprite;
+    [SerializeField]
     private Sprite[] Bird_Sprite;
-    [SerializeField]
-    private Sprite[] Coconut_Sprite;
-    [SerializeField]
-    private Sprite[] Crocodile_Sprite;
     [SerializeField]
     private Sprite[] Lion_Sprite;
     [SerializeField]
-    private Sprite[] Monkey_Sprite;
-    [SerializeField]
     private Sprite[] Rhino_Sprite;
     [SerializeField]
-    private Sprite[] Uncle_Sprite;
+    private Sprite[] Crocodile_Sprite;
+    [SerializeField]
+    private Sprite[] Coconut_Sprite;
+    [SerializeField]
+    private Sprite[] Bonus_Sprite;
 
     [Header("Miscellaneous UI")]
     [SerializeField]
@@ -367,9 +367,9 @@ public class SlotBehaviour : MonoBehaviour
         switch (val)
         {
             case 0:
-                for (int i = 0; i < Bonus_Sprite.Length; i++)
+                for (int i = 0; i < Monkey_Sprite.Length; i++)
                 {
-                    animScript.textureArray.Add(Bonus_Sprite[i]);
+                    animScript.textureArray.Add(Monkey_Sprite[i]);
                 }
                 break;
             case 1:
@@ -379,46 +379,46 @@ public class SlotBehaviour : MonoBehaviour
                 }
                 break;
             case 2:
+                for (int i = 0; i < Uncle_Sprite.Length; i++)
+                {
+                    animScript.textureArray.Add(Uncle_Sprite[i]);
+                }
+                break;
+            case 3:
                 for (int i = 0; i < Bird_Sprite.Length; i++)
                 {
                     animScript.textureArray.Add(Bird_Sprite[i]);
                 }
                 break;
-            case 3:
-                for (int i = 0; i < Coconut_Sprite.Length; i++)
-                {
-                    animScript.textureArray.Add(Coconut_Sprite[i]);
-                }
-                break;
             case 4:
-                for (int i = 0; i < Crocodile_Sprite.Length; i++)
-                {
-                    animScript.textureArray.Add(Crocodile_Sprite[i]);
-                }
-                break;
-            case 5:
                 for (int i = 0; i < Lion_Sprite.Length; i++)
                 {
                     animScript.textureArray.Add(Lion_Sprite[i]);
                 }
                 break;
-            case 6:
+            case 5:
                 for (int i = 0; i < Rhino_Sprite.Length; i++)
                 {
                     animScript.textureArray.Add(Rhino_Sprite[i]);
                 }
                 break;
+            case 6:
+                for (int i = 0; i < Crocodile_Sprite.Length; i++)
+                {
+                    animScript.textureArray.Add(Crocodile_Sprite[i]);
+                }
+                break;
 
             case 7:
-                for (int i = 0; i < Monkey_Sprite.Length; i++)
+                for (int i = 0; i < Coconut_Sprite.Length; i++)
                 {
-                    animScript.textureArray.Add(Monkey_Sprite[i]);  
+                    animScript.textureArray.Add(Coconut_Sprite[i]);  
                 }
                 break;
             case 8:
-                for (int i = 0; i < Uncle_Sprite.Length; i++)
+                for (int i = 0; i < Bonus_Sprite.Length; i++)
                 {
-                    animScript.textureArray.Add(Uncle_Sprite[i]);
+                    animScript.textureArray.Add(Bonus_Sprite[i]);
                 }
                 break;
         }
