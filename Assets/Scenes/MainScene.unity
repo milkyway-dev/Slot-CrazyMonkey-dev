@@ -790,6 +790,8 @@ MonoBehaviour:
   Breaking: {fileID: 8555301033533018525}
   imageAnimation: {fileID: 5677569223763919373}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &182283779
 MonoBehaviour:
@@ -1238,6 +1240,8 @@ MonoBehaviour:
   Breaking: {fileID: 5341512542746889262}
   imageAnimation: {fileID: 1443376426318577798}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &362163846
 MonoBehaviour:
@@ -1343,6 +1347,8 @@ MonoBehaviour:
   Breaking: {fileID: 447447414081032892}
   imageAnimation: {fileID: 2402055689336661764}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &371723284
 MonoBehaviour:
@@ -1478,6 +1484,9 @@ MonoBehaviour:
   audioController: {fileID: 451215837}
   WinPopup_Object: {fileID: 0}
   Win_Text: {fileID: 0}
+  FreeSpinPopup_Object: {fileID: 0}
+  Free_Text: {fileID: 0}
+  FreeSpin_Button: {fileID: 0}
   slotManager: {fileID: 2046803210}
 --- !u!1 &392668451
 GameObject:
@@ -2397,6 +2406,8 @@ MonoBehaviour:
   Breaking: {fileID: 6925119759931680057}
   imageAnimation: {fileID: 8326911138896926106}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &472466664
 MonoBehaviour:
@@ -2984,6 +2995,8 @@ MonoBehaviour:
   Breaking: {fileID: 1035511498}
   imageAnimation: {fileID: 1035511500}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &535602702
 MonoBehaviour:
@@ -3750,6 +3763,8 @@ MonoBehaviour:
   Breaking: {fileID: 512334774}
   imageAnimation: {fileID: 512334776}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &736378205
 MonoBehaviour:
@@ -3855,6 +3870,8 @@ MonoBehaviour:
   Breaking: {fileID: 149991213}
   imageAnimation: {fileID: 149991215}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &809094786
 MonoBehaviour:
@@ -4814,6 +4831,8 @@ MonoBehaviour:
   Breaking: {fileID: 1183673736}
   imageAnimation: {fileID: 1183673738}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &975655543
 MonoBehaviour:
@@ -5103,6 +5122,8 @@ MonoBehaviour:
   Breaking: {fileID: 1833257284407100769}
   imageAnimation: {fileID: 3225685003962234616}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &1089500809
 MonoBehaviour:
@@ -7469,6 +7490,8 @@ MonoBehaviour:
   Breaking: {fileID: 1529358461}
   imageAnimation: {fileID: 1529358463}
   _bonusManager: {fileID: 908406312}
+  SocketManager: {fileID: 0}
+  uiManager: {fileID: 0}
   isOpen: 0
 --- !u!114 &1982626184
 MonoBehaviour:
@@ -8088,6 +8111,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 3dcde775187454a1d91cd36513d58cdd, type: 3}
   Balance_text: {fileID: 6735422438506386685}
   TotalBet_text: {fileID: 1359196136716862987}
+  BetPerLine_text: {fileID: 2472140192238883263}
   Lines_text: {fileID: 827196120}
   Line_text: []
   TotalWin_text: {fileID: 0}
