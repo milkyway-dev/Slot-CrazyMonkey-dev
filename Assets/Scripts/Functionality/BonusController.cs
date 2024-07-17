@@ -17,11 +17,14 @@ public class BonusController : MonoBehaviour
     private List<CoconutBreaking> BonusCases;
     [SerializeField]
     private AudioController _audioManager;
+    [SerializeField]
+    private TMP_Text Win_Text;
 
     [SerializeField]
     private List<int> CaseValues;
 
     int index = 0;
+    int winAmount = 0;
 
     internal void GetBailCaseList(List<int> values)
     {
@@ -56,8 +59,8 @@ public class BonusController : MonoBehaviour
     internal void GameOver()
     {
         slotManager.CheckPopups = false;
-      //  _audioManager.SwitchBGSound(false);
         if (Bonus_Object) Bonus_Object.SetActive(false);
+        if (_audioManager) _audioManager.SwitchBGSound(false);
     }
 
     internal int GetValue()
@@ -66,13 +69,33 @@ public class BonusController : MonoBehaviour
 
         value = CaseValues[index];
 
+        winAmount += value;
+
         index++;
+
+        if (_audioManager) _audioManager.PlayBonusAudio("coconut");
 
         return value;
     }
 
     private void StartBonus()
     {
+        if (_audioManager) _audioManager.SwitchBGSound(true);
         if (Bonus_Object) Bonus_Object.SetActive(true);
+    }
+
+    internal void PlayWinSound()
+    {
+        if (_audioManager) _audioManager.PlayBonusAudio("win");
+    }
+
+    internal void PlayLoseSound()
+    {
+        if (_audioManager) _audioManager.PlayBonusAudio("lose");
+    }
+
+    internal void UpdateWinText()
+    {
+        if (Win_Text) Win_Text.text = winAmount.ToString();
     }
 }

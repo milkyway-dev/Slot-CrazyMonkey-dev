@@ -45,32 +45,35 @@ public class CoconutBreaking : MonoBehaviour
     void PopulateCase()
     {
         int value = _bonusManager.GetValue();
-        if (value == -1)
+        if (value > 0)
         {
-            text.text = "game over";
+            text.text = value.ToString();
         }
        
         else
         {
-            text.text = value.ToString();
+            text.text = "GAME OVER";
         }
     }
 
     IEnumerator setCase()
     {
         yield return new WaitUntil(() => !imageAnimation.isplaying);
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.8f);
+        _bonusManager.UpdateWinText();
         text.gameObject.SetActive(true);
         text.fontMaterial.SetColor(ShaderUtilities.ID_GlowColor, text_color);
         isOpen = true;
-        if (text.text == "game over")
+        if (text.text == "GAME OVER")
         {
+            _bonusManager.PlayLoseSound();
             _bonusManager.enableRayCastPanel(true);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             _bonusManager.GameOver();
         }
         else
         {
+            _bonusManager.PlayWinSound();
             _bonusManager.enableRayCastPanel(false);
         }
     }

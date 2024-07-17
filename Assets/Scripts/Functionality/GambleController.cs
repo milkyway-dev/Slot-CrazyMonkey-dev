@@ -131,6 +131,7 @@ public class GambleController : MonoBehaviour
 
     void PickRandomCard()
     {
+        if (audioController) audioController.PlayBonusAudio("card");
         int maxlength = cardSpriteList.Length / 2;
 
         int lowCardIndex = Random.Range(0, maxlength);

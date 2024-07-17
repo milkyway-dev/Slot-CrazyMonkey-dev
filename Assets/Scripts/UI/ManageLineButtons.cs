@@ -27,7 +27,7 @@ public class ManageLineButtons : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		if (num <= payManager.CurrentLines)
+		if (num <= 9)
 		{
 			isEnabled = true;
 		}
