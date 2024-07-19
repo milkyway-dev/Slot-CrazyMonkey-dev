@@ -435,12 +435,12 @@ public class SlotBehaviour : MonoBehaviour
 
     private IEnumerator TweenRoutine()
     {
-        if (audioController) audioController.PlayWLAudio("spin");
         if (currentBalance < currentTotalBet && !IsFreeSpin)
         {
             CompareBalance();
             yield break;
         }
+        if (audioController) audioController.PlayWLAudio("spin");
         IsSpinning = true;
         ToggleButtonGrp(false);
         for (int i = 0; i < numberOfSlots; i++)
@@ -560,20 +560,9 @@ public class SlotBehaviour : MonoBehaviour
     //start the icons animation
     private void StartGameAnimation(GameObject animObjects)
     {
-        int i = animObjects.transform.childCount;
-
-        if (i > 0)
-        {
-            ImageAnimation temp = animObjects.GetComponent<ImageAnimation>();
-            temp.StartAnimation();
-            TempList.Add(temp);
-        }
-        else
-        {
-            animObjects.GetComponent<ImageAnimation>().StartAnimation();
-
-        }
-
+        ImageAnimation temp = animObjects.GetComponent<ImageAnimation>();
+        temp.StartAnimation();
+        TempList.Add(temp);
     }
 
     //stop the icons animation
@@ -583,6 +572,8 @@ public class SlotBehaviour : MonoBehaviour
         {
             TempList[i].StopAnimation();
         }
+        TempList.Clear();
+        TempList.TrimExcess();
     }
 
     

@@ -2391,8 +2391,6 @@ MonoBehaviour:
   LoadPercent_Text: {fileID: 394717745}
   GameExit_Button: {fileID: 5130022667662810585}
   audioController: {fileID: 1561446909960256977}
-  WinPopup_Object: {fileID: 0}
-  Win_Text: {fileID: 0}
   LBExit_Button: {fileID: 1295463928}
   LBPopup_Object: {fileID: 250014329}
   CloseDisconnect_Button: {fileID: 1326696850}
@@ -3822,7 +3820,7 @@ MonoBehaviour:
   uiManager: {fileID: 377874625}
   bonusdata: []
   _jsManager: {fileID: 500036493}
-  testToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OGU3ODRkYWNmNmNiYjRmMjAzOTNmMiIsInVzZXJuYW1lIjoicml0aWsiLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzIxMTk0MDI0LCJleHAiOjE3MjEyODA0MjR9.sI_PPeYlLmOiwVqJ7EO_cHgPRlHPA-2lG0CSRM0hap4
+  testToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTY0NjFjNGZhYTM5NWNmOTc0N2E1YiIsInVzZXJuYW1lIjoiZ2F1cmF2Iiwicm9sZSI6InBsYXllciIsImlhdCI6MTcyMTI5MjAxNywiZXhwIjoxNzIxMzc4NDE3fQ.tGzWdi9NXoEJjYgTZ9g5isKCkVcrP-IkgSddLhGcEbY
 --- !u!114 &500036493
 MonoBehaviour:
   m_ObjectHideFlags: 0

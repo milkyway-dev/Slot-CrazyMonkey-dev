@@ -162,6 +162,8 @@ public class AudioController : MonoBehaviour
 
                 bg_adudio.mute = (vol == 0);
                 bg_adudio.volume = vol;
+                bg_audioBonus.mute = (vol == 0);
+                bg_audioBonus.volume = vol;
                 break;
             case "button":
                 audioPlayer_button.mute = (vol == 0);
@@ -170,6 +172,8 @@ public class AudioController : MonoBehaviour
             case "wl":
                 audioPlayer_wl.mute = (vol == 0);
                 audioPlayer_wl.volume = vol;
+                audioPlayer_Bonus.mute = (vol == 0);
+                audioPlayer_Bonus.volume = vol;
                 break;
             case "all":
 
