@@ -587,8 +587,8 @@ public class SlotBehaviour : MonoBehaviour
 
             for (int i = 0; i < LineId.Count; i++)
             {
-                PayCalculator.DontDestroyLines.Add(LineId[i] - 1);
-                PayCalculator.GeneratePayoutLinesBackend(LineId[i]-1);
+                PayCalculator.DontDestroyLines.Add(LineId[i]);
+                PayCalculator.GeneratePayoutLinesBackend(LineId[i]);
             }
 
             if (jackpot > 0)
