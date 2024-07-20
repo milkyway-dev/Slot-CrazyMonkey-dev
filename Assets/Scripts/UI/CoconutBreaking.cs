@@ -28,7 +28,9 @@ public class CoconutBreaking : MonoBehaviour
     internal void ResetCase()
     {
         isOpen = false;
+        Breaking.SetActive(false);
         text.gameObject.SetActive(false);
+        Bail.gameObject.SetActive(true);
     }
 
     void OpenCase()
