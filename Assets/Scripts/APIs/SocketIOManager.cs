@@ -35,6 +35,7 @@ public class SocketIOManager : MonoBehaviour
     internal JSHandler _jsManager;
 
     protected string SocketURI = "https://dev.casinoparadize.com";
+    //protected string SocketURI = "https://7p68wzhv-5000.inc1.devtunnels.ms/";
 
     [SerializeField]
     private string testToken;
@@ -116,6 +117,18 @@ public class SocketIOManager : MonoBehaviour
 #endif
     }
 
+    private void OnSocketState(bool state)
+    {
+        if (state)
+        {
+            Debug.Log("my state is " + state);
+            InitRequest("AUTH");
+        }
+        else
+        {
+        }
+    }
+
     private IEnumerator WaitForAuthToken(SocketOptions options)
     {
         // Wait until myAuth is not null
@@ -150,6 +163,7 @@ public class SocketIOManager : MonoBehaviour
         this.manager.Socket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
         this.manager.Socket.On<string>(SocketIOEventTypes.Error, OnError);
         this.manager.Socket.On<string>("message", OnListenEvent);
+        this.manager.Socket.On<bool>("socketState", OnSocketState);
 
         // Start connecting to the server
         this.manager.Open();
@@ -159,7 +173,7 @@ public class SocketIOManager : MonoBehaviour
     void OnConnected(ConnectResponse resp)
     {
         Debug.Log("Connected!");
-        InitRequest("AUTH");
+        //InitRequest("AUTH");
     }
 
     private void OnDisconnected(string response)
