@@ -37,6 +37,7 @@ public class CoconutBreaking : MonoBehaviour
     {
         if (isOpen)
             return;
+        _bonusManager.enableRayCastPanel(true);
         PopulateCase();
         imageAnimation.StartAnimation();
         Breaking.SetActive(true);
@@ -46,10 +47,10 @@ public class CoconutBreaking : MonoBehaviour
 
     void PopulateCase()
     {
-        int value = _bonusManager.GetValue();
+        double value = _bonusManager.GetValue();
         if (value > 0)
         {
-            text.text = value.ToString();
+            text.text = value.ToString("f2");
         }
        
         else

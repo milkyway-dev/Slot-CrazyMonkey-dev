@@ -24,7 +24,7 @@ public class BonusController : MonoBehaviour
     private List<int> CaseValues;
 
     int index = 0;
-    int winAmount = 0;
+    double winAmount = 0;
 
     internal void GetBailCaseList(List<int> values)
     {
@@ -65,19 +65,19 @@ public class BonusController : MonoBehaviour
         if (_audioManager) _audioManager.SwitchBGSound(false);
     }
 
-    internal int GetValue()
+    internal double GetValue()
     {
         int value = 0;
 
         value = CaseValues[index];
 
-        winAmount += value;
+        winAmount += (value * slotManager.currentBet);
 
         index++;
 
         if (_audioManager) _audioManager.PlayBonusAudio("coconut");
 
-        return value;
+        return (value * slotManager.currentBet);
     }
 
     private void StartBonus()
@@ -98,6 +98,6 @@ public class BonusController : MonoBehaviour
 
     internal void UpdateWinText()
     {
-        if (Win_Text) Win_Text.text = winAmount.ToString();
+        if (Win_Text) Win_Text.text = winAmount.ToString("f2");
     }
 }

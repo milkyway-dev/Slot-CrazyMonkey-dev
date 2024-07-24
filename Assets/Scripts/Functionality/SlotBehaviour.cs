@@ -128,6 +128,7 @@ public class SlotBehaviour : MonoBehaviour
     private int BetCounter = 0;
     private double currentBalance = 0;
     private double currentTotalBet = 0;
+    internal double currentBet = 0;
 
     protected int Lines = 9;
 
@@ -196,7 +197,7 @@ public class SlotBehaviour : MonoBehaviour
         BetCounter = SocketManager.initialData.Bets.Count - 1;
         if (LineBet_text) LineBet_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
         if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] * Lines).ToString();
-        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString();
+        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f2");
         currentBalance = SocketManager.playerdata.Balance;
         currentTotalBet = SocketManager.initialData.Bets[BetCounter] * Lines;
         uiManager.InitialiseUIData(SocketManager.initUIData.AbtLogo.link, SocketManager.initUIData.AbtLogo.logoSprite, SocketManager.initUIData.ToULink, SocketManager.initUIData.PopLink, SocketManager.initUIData.paylines);
@@ -438,6 +439,8 @@ public class SlotBehaviour : MonoBehaviour
         if (currentBalance < currentTotalBet && !IsFreeSpin)
         {
             CompareBalance();
+            StopAutoSpin();
+            yield return new WaitForSeconds(1);
             yield break;
         }
         if (audioController) audioController.PlayWLAudio("spin");
@@ -471,7 +474,7 @@ public class SlotBehaviour : MonoBehaviour
 
         balance = balance - bet;
 
-        if (Balance_text) Balance_text.text = balance.ToString();
+        if (Balance_text) Balance_text.text = balance.ToString("f2");
 
         SocketManager.AccumulateResult(BetCounter);
         print("before result");
@@ -504,9 +507,11 @@ public class SlotBehaviour : MonoBehaviour
 
         if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString();
 
-        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString();
+        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f2");
 
         currentBalance = SocketManager.playerdata.Balance;
+
+        currentBet = SocketManager.initialData.Bets[BetCounter];
 
         yield return new WaitForSeconds(0.5f);
         CheckBonusGame();
@@ -554,7 +559,7 @@ public class SlotBehaviour : MonoBehaviour
 
     internal void updateBalance()
     {
-        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString();
+        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f2");
     }
 
     //start the icons animation
