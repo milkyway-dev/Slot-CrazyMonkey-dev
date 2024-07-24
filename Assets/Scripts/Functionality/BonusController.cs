@@ -32,6 +32,8 @@ public class BonusController : MonoBehaviour
         CaseValues.Clear();
         CaseValues.TrimExcess();
         CaseValues = values;
+        if (Win_Text) Win_Text.text = "0";
+        winAmount = 0;
 
         foreach (CoconutBreaking cases in BonusCases)
         {
