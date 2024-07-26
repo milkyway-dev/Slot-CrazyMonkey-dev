@@ -19,17 +19,14 @@ public class CardFlip : MonoBehaviour
     {
         Card_transform = Card_Button.GetComponent<RectTransform>();
         if (Card_Button) Card_Button.onClick.RemoveAllListeners();
-        if (Card_Button) Card_Button.onClick.AddListener(FlipMyObject);
+        if (Card_Button) Card_Button.onClick.AddListener(FlipMainCard);
     }
-
-
 
     internal void FlipMyObject()
     {
-
         if (!once && gambleController.gambleStart)
         {
-
+            Debug.Log("run flip card 2");
             Card_transform.localEulerAngles = new Vector3(0, 180, 0);
             Card_transform.DORotate(new Vector3(0, 0, 0), 1, RotateMode.FastBeyond360);
             once = true;
@@ -37,9 +34,23 @@ public class CardFlip : MonoBehaviour
         }
     }
 
+    private void FlipMainCard()
+    {
+        Debug.Log("run flip card");
+        StartCoroutine(FlipMainObject());
+    }
+
+    private IEnumerator FlipMainObject()
+    {
+        Debug.Log("run flip card 1");
+        gambleController.RunOnCollect();
+        yield return new WaitUntil(() => gambleController.isResult);
+        cardImage = gambleController.GetCard();
+        FlipMyObject();
+    }
+
     void changeSprite()
     {
-
         if (Card_Button)
         {
             Card_Button.image.sprite = cardImage;
