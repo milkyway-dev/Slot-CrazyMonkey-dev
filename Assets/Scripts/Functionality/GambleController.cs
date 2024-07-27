@@ -224,18 +224,15 @@ public class GambleController : MonoBehaviour
 
     internal void FlipAllCard()
     {
-        Debug.Log("run extra flips");
         int cardVal = 0;
         for (int i = 0; i < allcards.Count; i++) 
         {
             if (allcards[i].once)
             {
-                Debug.Log("run extra flips 1");
                 continue;
             }
             else
             {
-                Debug.Log("run extra flips 2");
                 allcards[i].Card_Button.interactable = false;
                 if (cardVal == 0)
                 {
@@ -269,8 +266,8 @@ public class GambleController : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         gambleStart = false;
-        yield return new WaitForSeconds(4);
-        //slotController.updateBalance();
+        yield return new WaitForSeconds(2);
+        slotController.updateBalance();
         if (gamble_game) gamble_game.SetActive(false);
         allcards.ForEach((element) =>
         {

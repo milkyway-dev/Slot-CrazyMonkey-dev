@@ -34,8 +34,8 @@ public class SocketIOManager : MonoBehaviour
     [SerializeField]
     internal JSHandler _jsManager;
 
-    //protected string SocketURI = "https://dev.casinoparadize.com";
-    protected string SocketURI = "https://7p68wzhv-5000.inc1.devtunnels.ms/";
+    protected string SocketURI = "https://dev.casinoparadize.com";
+    //protected string SocketURI = "https://7p68wzhv-5000.inc1.devtunnels.ms/";
 
     [SerializeField]
     private string testToken;
@@ -266,7 +266,6 @@ public class SocketIOManager : MonoBehaviour
             case "GambleResult":
                 {
                     Debug.Log(jsonObject);
-                    playerdata = myData.message.PlayerData;
                     myMessage = myData.message;
                     isResultdone = true;
                     break;
@@ -274,7 +273,6 @@ public class SocketIOManager : MonoBehaviour
             case "gambleInitData":
                 {
                     Debug.Log(jsonObject);
-                    playerdata = myData.message.PlayerData;
                     myMessage = myData.message;
                     isResultdone = true;
                     break;
