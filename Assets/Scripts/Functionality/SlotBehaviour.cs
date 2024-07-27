@@ -520,7 +520,10 @@ public class SlotBehaviour : MonoBehaviour
         yield return new WaitUntil(() => !CheckPopups);
         if (!IsAutoSpin)
         {
-            if (SocketManager.playerdata.currentWining > 1) gambleController.toggleDoubleButton(true);
+            if (SocketManager.playerdata.currentWining > 0 && SocketManager.playerdata.currentWining <= SocketManager.GambleLimit) 
+            {
+                gambleController.toggleDoubleButton(true);
+            }
             ToggleButtonGrp(true);
             IsSpinning = false;
         }

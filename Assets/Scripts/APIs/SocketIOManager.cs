@@ -26,6 +26,8 @@ public class SocketIOManager : MonoBehaviour
     internal GameData resultData = null;
     internal PlayerData playerdata = null;
     internal Message myMessage = null;
+    internal double GambleLimit = 0;
+
     [SerializeField]
     internal List<string> bonusdata = null;
 
@@ -250,6 +252,7 @@ public class SocketIOManager : MonoBehaviour
                     bonusdata = myData.message.BonusData;
                     List<string> InitialReels = ConvertListOfListsToStrings(initialData.Reel);
                     InitialReels = RemoveQuotes(InitialReels);
+                    GambleLimit = myData.message.maxGambleBet;
                     PopulateSlotSocket(InitialReels);
                     break;
                 }
@@ -527,6 +530,7 @@ public class Message
     public List<ExCard> exCards { get; set; }
     public bool playerWon { get; set; }
     public int winningAmount { get; set; }
+    public double maxGambleBet { get; set; }
 }
 
 [Serializable]
