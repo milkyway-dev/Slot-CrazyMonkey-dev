@@ -434,6 +434,16 @@ public class SlotBehaviour : MonoBehaviour
         tweenroutine = StartCoroutine(TweenRoutine());
     }
 
+    private void OnApplicationFocus(bool focus)
+    {
+        if (focus)
+        {
+            if (!IsSpinning)
+            {
+                if (audioController) audioController.StopWLAaudio();
+            }
+        }
+    }
 
     private IEnumerator TweenRoutine()
     {

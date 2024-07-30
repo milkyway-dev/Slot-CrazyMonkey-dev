@@ -70,6 +70,12 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject DisconnectPopup_Object;
 
+    [Header("AnotherDevice Popup")]
+    [SerializeField]
+    private Button CloseAD_Button;
+    [SerializeField]
+    private GameObject ADPopup_Object;
+
     [Header("Quit Popup")]
     [SerializeField]
     private GameObject QuitPopup_Object;
@@ -153,6 +159,9 @@ public class UIManager : MonoBehaviour
         if (SettingExit_button) SettingExit_button.onClick.RemoveAllListeners();
         if (SettingExit_button) SettingExit_button.onClick.AddListener(delegate { ClosePopup(Setting_panel); });
 
+        if (CloseAD_Button) CloseAD_Button.onClick.RemoveAllListeners();
+        if (CloseAD_Button) CloseAD_Button.onClick.AddListener(CallOnExitFunction);
+
         if (Right_Button) Right_Button.onClick.RemoveAllListeners();
         if (Right_Button) Right_Button.onClick.AddListener(delegate { ChangePage(true); });
 
@@ -163,6 +172,11 @@ public class UIManager : MonoBehaviour
     internal void LowBalPopup()
     {
         OpenPopup(LBPopup_Object);
+    }
+
+    internal void ADfunction()
+    {
+        OpenPopup(ADPopup_Object);
     }
 
     internal void DisconnectionPopup()
