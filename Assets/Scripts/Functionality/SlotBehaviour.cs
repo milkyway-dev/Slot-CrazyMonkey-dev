@@ -94,6 +94,7 @@ public class SlotBehaviour : MonoBehaviour
 
     private List<Tweener> alltweens = new List<Tweener>();
 
+    private Tweener WinTween = null;
 
     [SerializeField]
     private List<ImageAnimation> TempList;  //stores the sprites whose animation is running at present 
@@ -151,6 +152,7 @@ public class SlotBehaviour : MonoBehaviour
 
         if (AutoSpinStop_Button) AutoSpinStop_Button.onClick.RemoveAllListeners();
         if (AutoSpinStop_Button) AutoSpinStop_Button.onClick.AddListener(StopAutoSpin);
+        tweenHeight = (15 * IconSizeFactor) - 280;
     }
 
     private void AutoSpin()
@@ -198,6 +200,7 @@ public class SlotBehaviour : MonoBehaviour
         if (LineBet_text) LineBet_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
         if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] * Lines).ToString();
         if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f2");
+        if (TotalWin_text) TotalWin_text.text = "0.00";
         currentBalance = SocketManager.playerdata.Balance;
         currentTotalBet = SocketManager.initialData.Bets[BetCounter] * Lines;
         uiManager.InitialiseUIData(SocketManager.initUIData.AbtLogo.link, SocketManager.initUIData.AbtLogo.logoSprite, SocketManager.initUIData.ToULink, SocketManager.initUIData.PopLink, SocketManager.initUIData.paylines);
@@ -298,51 +301,13 @@ public class SlotBehaviour : MonoBehaviour
 
 
     //just for testing purposes delete on production
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && SlotStart_Button.interactable)
-        {
-            StartSlots();
-        }
-    }
-
-    //populate the slots with the values recieved from backend
-    internal void PopulateInitalSlots(int number, List<int> myvalues)
-    {
-        Debug.Log("populate initial slots");
-        PopulateSlot(myvalues, number);
-    }
-
-    //reset the layout after populating the slots
-    internal void LayoutReset(int number)
-    {
-        if (Slot_Elements[number]) Slot_Elements[number].ignoreLayout = true;
-        if (SlotStart_Button) SlotStart_Button.interactable = true;
-    }
-
-   
-    private void PopulateSlot(List<int> values, int number)
-    {
-        Debug.Log("populate initial slots 1 ");
-        if (Slot_Objects[number]) Slot_Objects[number].SetActive(true);
-        for (int i = 0; i < values.Count; i++)
-        {
-            GameObject myImg = Instantiate(Image_Prefab, Slot_Transform[number]);
-            images[number].slotImages.Add(myImg.GetComponent<Image>());
-            images[number].slotImages[i].sprite = myImages[values[i]];
-            PopulateAnimationSprites(images[number].slotImages[i].gameObject.GetComponent<ImageAnimation>(), values[i]);
-        }
-        for (int k = 0; k > 2; k++)
-        {
-            GameObject mylastImg = Instantiate(Image_Prefab, Slot_Transform[number]);
-            images[number].slotImages.Add(mylastImg.GetComponent<Image>());
-            images[number].slotImages[images[number].slotImages.Count - 1].sprite = myImages[values[k]];
-            PopulateAnimationSprites(images[number].slotImages[k].gameObject.GetComponent<ImageAnimation>(), values[k]);
-        }
-        if (mainContainer_RT) LayoutRebuilder.ForceRebuildLayoutImmediate(mainContainer_RT);
-        tweenHeight = (values.Count * IconSizeFactor) - 280;
-        GenerateMatrix(number);
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Space) && SlotStart_Button.interactable)
+    //    {
+    //        StartSlots();
+    //    }
+    //}
 
     //function to populate animation sprites accordingly
     private void PopulateAnimationSprites(ImageAnimation animScript, int val)
@@ -413,6 +378,7 @@ public class SlotBehaviour : MonoBehaviour
     {
         if (audioController) audioController.PlaySpinButtonAudio();
         if (gambleController) gambleController.toggleDoubleButton(false);
+        if (gambleController) gambleController.GambleTweeningAnim(false);
         if (!autoSpin)
         {
             if (AutoSpinRoutine != null)
@@ -425,7 +391,7 @@ public class SlotBehaviour : MonoBehaviour
 
         }
         PayCalculator.DontDestroyLines.Clear();
-
+        WinningsAnim(false);
         if (TempList.Count > 0)
         {
             StopGameAnimation();
@@ -444,6 +410,19 @@ public class SlotBehaviour : MonoBehaviour
             }
         }
     }
+
+    internal void shuffleInitialMatrix()
+    {
+        for (int i = 0; i < Tempimages.Count; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, myImages.Length);
+                Tempimages[i].slotImages[j].sprite = myImages[randomIndex];
+            }
+        }
+    }
+
 
     private IEnumerator TweenRoutine()
     {
@@ -465,33 +444,7 @@ public class SlotBehaviour : MonoBehaviour
 
         if (!IsFreeSpin)
         {
-            double bet = 0;
-            double balance = 0;
-            try
-            {
-                bet = double.Parse(TotalBet_text.text);
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Error while conversion " + e.Message);
-            }
-
-            try
-            {
-                balance = double.Parse(Balance_text.text);
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Error while conversion " + e.Message);
-            }
-            double initAmount = balance;
-
-            balance = balance - bet;
-
-            DOTween.To(() => initAmount, (val) => initAmount = val, balance, 0.8f).OnUpdate(() =>
-            {
-                if (Balance_text) Balance_text.text = initAmount.ToString("f2");
-            });
+            BalanceDeduction();
         }
         SocketManager.AccumulateResult(BetCounter);
         print("before result");
@@ -522,7 +475,7 @@ public class SlotBehaviour : MonoBehaviour
 
         CheckPopups = true;
 
-        if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString();
+        if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString("f2");
 
         if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f2");
 
@@ -537,17 +490,74 @@ public class SlotBehaviour : MonoBehaviour
         yield return new WaitUntil(() => !CheckPopups);
         if (!IsAutoSpin)
         {
-            if (SocketManager.playerdata.currentWining > 0 && SocketManager.playerdata.currentWining <= SocketManager.GambleLimit) 
-            {
-                gambleController.toggleDoubleButton(true);
-            }
+            ActivateGamble();
             ToggleButtonGrp(true);
             IsSpinning = false;
         }
         else
         {
+            ActivateGamble();
             yield return new WaitForSeconds(2f);
             IsSpinning = false;
+        }
+    }
+
+    private void ActivateGamble()
+    {
+        if (SocketManager.playerdata.currentWining > 0 && SocketManager.playerdata.currentWining <= SocketManager.GambleLimit)
+        {
+            gambleController.GambleTweeningAnim(true);
+            gambleController.toggleDoubleButton(true);
+        }
+    }
+
+    internal void DeactivateGamble()
+    {
+        StopAutoSpin();
+    }
+
+
+    private void BalanceDeduction()
+    {
+        double bet = 0;
+        double balance = 0;
+        try
+        {
+            bet = double.Parse(TotalBet_text.text);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error while conversion " + e.Message);
+        }
+
+        try
+        {
+            balance = double.Parse(Balance_text.text);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error while conversion " + e.Message);
+        }
+        double initAmount = balance;
+
+        balance = balance - bet;
+
+        DOTween.To(() => initAmount, (val) => initAmount = val, balance, 0.8f).OnUpdate(() =>
+        {
+            if (Balance_text) Balance_text.text = initAmount.ToString("f2");
+        });
+    }
+
+    private void WinningsAnim(bool IsStart)
+    {
+        if (IsStart)
+        {
+            WinTween = TotalWin_text.gameObject.GetComponent<RectTransform>().DOScale(new Vector2(1.5f, 1.5f), 1f).SetLoops(-1, LoopType.Yoyo).SetDelay(0);
+        }
+        else
+        {
+            WinTween.Kill();
+            TotalWin_text.gameObject.GetComponent<RectTransform>().localScale = Vector3.one;
         }
     }
 
@@ -646,6 +656,7 @@ public class SlotBehaviour : MonoBehaviour
                     }
                 }
             }
+            WinningsAnim(true);
         }
         else
         {
@@ -654,15 +665,6 @@ public class SlotBehaviour : MonoBehaviour
         }
 
 
-    }
-
-    
-    private void GenerateMatrix(int value)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            Tempimages[value].slotImages.Add(images[value].slotImages[images[value].slotImages.Count - 5 + j]);
-        }
     }
 
     #region TweeningCode

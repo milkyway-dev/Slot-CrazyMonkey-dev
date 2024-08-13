@@ -52,6 +52,8 @@ public class UIManager : MonoBehaviour
     private Image Loading_Image;
     [SerializeField]
     private TMP_Text LoadPercent_Text;
+    [SerializeField]
+    private Button QuitSplash_button;
 
     [SerializeField]
     private Button GameExit_Button;
@@ -167,6 +169,9 @@ public class UIManager : MonoBehaviour
 
         if (Left_Button) Left_Button.onClick.RemoveAllListeners();
         if (Left_Button) Left_Button.onClick.AddListener(delegate { ChangePage(false); });
+
+        if (QuitSplash_button) QuitSplash_button.onClick.RemoveAllListeners();
+        if (QuitSplash_button) QuitSplash_button.onClick.AddListener(delegate { OpenPopup(QuitPopup_Object); });
     }
 
     internal void LowBalPopup()
