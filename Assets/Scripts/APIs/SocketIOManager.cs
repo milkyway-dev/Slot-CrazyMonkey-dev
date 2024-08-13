@@ -221,16 +221,7 @@ public class SocketIOManager : MonoBehaviour
 
     private void AliveRequest()
     {
-        InitData message = new InitData();
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
-        {
-            this.manager.Socket.Emit("YES I AM ALIVE");
-            Debug.Log("JSON data sent: alive");
-        }
-        else
-        {
-            Debug.LogWarning("Socket is not connected.");
-        }
+        SendDataWithNamespace("YES I AM ALIVE");
     }
 
     private void InitRequest(string eventName)
@@ -241,22 +232,12 @@ public class SocketIOManager : MonoBehaviour
         message.id = "Auth";
         // Serialize message data to JSON
         string json = JsonUtility.ToJson(message);
-        Debug.Log(json);
-        // Send the message
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
-        {
-            this.manager.Socket.Emit(eventName, json);
-            Debug.Log("JSON data sent: " + json);
-        }
-        else
-        {
-            Debug.LogWarning("Socket is not connected.");
-        }
+        SendDataWithNamespace(eventName, json);
     }
 
     internal void CloseSocket()
     {
-        CloseSocketMesssage("EXIT");
+        SendDataWithNamespace("EXIT");
         DOVirtual.DelayedCall(0.1f, () =>
         {
             if (this.manager != null)
@@ -264,28 +245,6 @@ public class SocketIOManager : MonoBehaviour
                 this.manager.Close();
             }
         });
-    }
-
-    private void CloseSocketMesssage(string eventName)
-    {
-        // Construct message data
-
-        ExitData message = new ExitData();
-        message.id = "EXIT";
-
-        // Serialize message data to JSON
-        string json = JsonUtility.ToJson(message);
-        Debug.Log(json);
-        // Send the message
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
-        {
-            this.manager.Socket.Emit(eventName, json);
-            Debug.Log("JSON data sent: " + json);
-        }
-        else
-        {
-            Debug.LogWarning("Socket is not connected.");
-        }
     }
 
     private void ParseResponse(string jsonObject)
@@ -342,45 +301,41 @@ public class SocketIOManager : MonoBehaviour
 
     private void PopulateSlotSocket(List<string> slotPop)
     {
-        for (int i = 0; i < slotPop.Count; i++)
-        {
-            List<int> points = slotPop[i]?.Split(',')?.Select(Int32.Parse)?.ToList();
-            slotManager.PopulateInitalSlots(i, points);
-        }
-
-        for (int i = 0; i < slotPop.Count; i++)
-        {
-            slotManager.LayoutReset(i);
-        }
-
         slotManager.SetInitialUI();
-
+        slotManager.shuffleInitialMatrix();
+        
         isLoaded = true;
     }
+
 
     internal void AccumulateResult(double currBet)
     {
         isResultdone = false;
-        SendDataWithNamespace("SPIN", currBet, "message");
-    }
-    private void SendDataWithNamespace(string namespaceName, double bet, string eventName)
-    {
-        // Construct message data
-
         MessageData message = new MessageData();
         message.data = new BetData();
-        message.data.currentBet = bet;
+        message.data.currentBet = currBet;
         message.data.spins = 1;
-        message.data.currentLines = 9;
-        message.id = namespaceName;
+        message.data.currentLines = 20;
+        message.id = "SPIN";
         // Serialize message data to JSON
         string json = JsonUtility.ToJson(message);
-        Debug.Log(json);
+        SendDataWithNamespace("message", json);
+    }
+
+    private void SendDataWithNamespace(string eventName, string json = null)
+    {
         // Send the message
         if (this.manager.Socket != null && this.manager.Socket.IsOpen)
         {
-            this.manager.Socket.Emit(eventName, json);
-            Debug.Log("JSON data sent: " + json);
+            if (json != null)
+            {
+                this.manager.Socket.Emit(eventName, json);
+                Debug.Log("JSON data sent: " + json);
+            }
+            else
+            {
+                this.manager.Socket.Emit(eventName);
+            }
         }
         else
         {
@@ -399,15 +354,7 @@ public class SocketIOManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(message);
         Debug.Log(json);
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
-        {
-            this.manager.Socket.Emit("message", json);
-            Debug.Log("JSON data sent: " + json);
-        }
-        else
-        {
-            Debug.LogWarning("Socket is not connected.");
-        }
+        SendDataWithNamespace("message", json);
     }
 
     internal void OnCollect()
@@ -422,15 +369,7 @@ public class SocketIOManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(message);
         Debug.Log(json);
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
-        {
-            this.manager.Socket.Emit("message", json);
-            Debug.Log("JSON data sent: " + json);
-        }
-        else
-        {
-            Debug.LogWarning("Socket is not connected.");
-        }
+        SendDataWithNamespace("message", json);
     }
 
     private List<string> RemoveQuotes(List<string> stringList)
