@@ -491,6 +491,8 @@ public class SlotBehaviour : MonoBehaviour
         if (!IsAutoSpin)
         {
             ActivateGamble();
+            ToggleButtonGrp(true);
+            IsSpinning = false;
         }
         else
         {
@@ -507,8 +509,6 @@ public class SlotBehaviour : MonoBehaviour
             gambleController.GambleTweeningAnim(true);
             gambleController.toggleDoubleButton(true);
         }
-        ToggleButtonGrp(true);
-        IsSpinning = false;
     }
 
     internal void DeactivateGamble()
