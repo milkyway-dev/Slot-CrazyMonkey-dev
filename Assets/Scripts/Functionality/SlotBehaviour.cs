@@ -135,8 +135,6 @@ public class SlotBehaviour : MonoBehaviour
 
     private void Start()
     {
-
-
         IsAutoSpin = false;
         if (SlotStart_Button) SlotStart_Button.onClick.RemoveAllListeners();
         if (SlotStart_Button) SlotStart_Button.onClick.AddListener(delegate { StartSlots(); });
@@ -174,6 +172,11 @@ public class SlotBehaviour : MonoBehaviour
             AutoSpinRoutine = StartCoroutine(AutoSpinCoroutine());
 
         }
+    }
+
+    internal void GambleCollect()
+    {
+        SocketManager.GambleCollectCall();
     }
 
     internal void FreeSpin(int spins)

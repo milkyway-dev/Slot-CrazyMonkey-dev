@@ -37,6 +37,12 @@ public class GambleController : MonoBehaviour
     [SerializeField]
     private GameObject loadingScreen;
     [SerializeField]
+    private GameObject GambleEnd_Object;
+    [SerializeField]
+    private Button DoubleEnd_Button;
+    [SerializeField]
+    private Button CollectEnd_Button;
+    [SerializeField]
     private Image slider;
 
     private Sprite highcard_Sprite;
@@ -54,8 +60,13 @@ public class GambleController : MonoBehaviour
 
     private void Start()
     {
+        if (GambleEnd_Object) GambleEnd_Object.SetActive(false);
         if (doubleButton) doubleButton.onClick.RemoveAllListeners();
-        if (doubleButton) doubleButton.onClick.AddListener(StartGamblegame);
+        if (doubleButton) doubleButton.onClick.AddListener(delegate { StartGamblegame(); });
+        if (DoubleEnd_Button) DoubleEnd_Button.onClick.RemoveAllListeners();
+        if (DoubleEnd_Button) DoubleEnd_Button.onClick.AddListener(delegate { NormalCollectFunction(); StartGamblegame(true); });
+        if (CollectEnd_Button) CollectEnd_Button.onClick.RemoveAllListeners();
+        if (CollectEnd_Button) CollectEnd_Button.onClick.AddListener(OnReset);
         toggleDoubleButton(false);
     }
 
@@ -64,11 +75,21 @@ public class GambleController : MonoBehaviour
         doubleButton.interactable = toggle;
     }
 
-    void StartGamblegame()
+    private void OnReset()
     {
+        if (slotController) slotController.GambleCollect();
+        NormalCollectFunction();
+    }
+
+    void StartGamblegame(bool isRepeat = false)
+    {
+        if (GambleEnd_Object) GambleEnd_Object.SetActive(false);
         GambleTweeningAnim(false);
         slotController.DeactivateGamble();
-        winamount.text = "0";
+        if (!isRepeat)
+        {
+            winamount.text = "0";
+        }
         if (audioController) audioController.PlayButtonAudio();
         if (gamble_game) gamble_game.SetActive(true);
         loadingScreen.SetActive(true);
@@ -277,13 +298,13 @@ public class GambleController : MonoBehaviour
         if (socketManager.myMessage.playerWon)
         {
             winamount.text = "YOU WIN" + "\n" + socketManager.myMessage.currentWining.ToString();
+            if (GambleEnd_Object) GambleEnd_Object.SetActive(true);
         }
         else
         {
             winamount.text = "YOU LOSE" + "\n" + "0";
+            StartCoroutine(Collectroutine());
         }
-
-        StartCoroutine(Collectroutine());
 
     }
 
@@ -293,6 +314,23 @@ public class GambleController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         gambleStart = false;
         yield return new WaitForSeconds(2);
+        slotController.updateBalance();
+        if (gamble_game) gamble_game.SetActive(false);
+        allcards.ForEach((element) =>
+        {
+            element.Card_Button.image.sprite = cardCover;
+            element.Reset();
+
+        });
+        DealerCard_Script.Card_Button.image.sprite = cardCover;
+        DealerCard_Script.once = false;
+        toggleDoubleButton(false);
+
+    }
+
+    private void NormalCollectFunction()
+    {
+        gambleStart = false;
         slotController.updateBalance();
         if (gamble_game) gamble_game.SetActive(false);
         allcards.ForEach((element) =>
