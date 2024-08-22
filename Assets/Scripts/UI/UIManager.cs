@@ -30,6 +30,8 @@ public class UIManager : MonoBehaviour
     private Button Left_Button;
     [SerializeField]
     private GameObject[] Info_Screens;
+    [SerializeField]
+    private TMP_Text Bonus_Text;
     int screenCounter = 0;
 
     [Header("Settings Popup")]
@@ -275,6 +277,14 @@ public class UIManager : MonoBehaviour
                 text += "\n3x - " + paylines.symbols[i].Multiplier[2][0];
             }
             if (SymbolsText[i]) SymbolsText[i].text = text;
+        }
+
+        for (int i = 0; i < paylines.symbols.Count; i++)
+        {
+            if (paylines.symbols[i].Name.ToUpper() == "BONUS")
+            {
+                if (Bonus_Text) Bonus_Text.text = paylines.symbols[i].description.ToString();
+            }
         }
     }
 
