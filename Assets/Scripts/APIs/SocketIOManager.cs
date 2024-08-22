@@ -54,7 +54,7 @@ public class SocketIOManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.unityLogger.logEnabled = false;
+        //Debug.unityLogger.logEnabled = false;
         isLoaded = false;
     }
 
@@ -597,6 +597,7 @@ public class Symbol
     public object defaultAmount { get; set; }
     public object symbolsCount { get; set; }
     public object increaseValue { get; set; }
+    public object description { get; set; }
     public int freeSpin { get; set; }
 }
 
