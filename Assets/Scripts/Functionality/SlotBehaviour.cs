@@ -619,7 +619,7 @@ public class SlotBehaviour : MonoBehaviour
     private void CheckPayoutLineBackend(List<int> LineId, List<string> points_AnimString, double jackpot = 0)
     {
         List<int> points_anim = null;
-        if (LineId.Count > 0)
+        if (LineId.Count > 0 || points_AnimString.Count > 0) 
         {
             if (audioController) audioController.PlayWLAudio("win");
 
