@@ -45,6 +45,8 @@ public class SocketIOManager : MonoBehaviour
 
     internal bool isResultdone = false;
 
+    internal bool SetInit = false;
+
     protected string gameID = "SL-CRM";
 
     internal bool isLoaded = false;
@@ -56,6 +58,7 @@ public class SocketIOManager : MonoBehaviour
     {
         //Debug.unityLogger.logEnabled = false;
         isLoaded = false;
+        SetInit = false;
     }
 
     private void Start()
@@ -244,15 +247,22 @@ public class SocketIOManager : MonoBehaviour
         {
             case "InitData":
                 {
-                    Debug.Log(jsonObject);
                     initialData = myData.message.GameData;
                     initUIData = myData.message.UIData;
                     playerdata = myData.message.PlayerData;
                     bonusdata = myData.message.BonusData;
-                    List<string> InitialReels = ConvertListOfListsToStrings(initialData.Reel);
-                    InitialReels = RemoveQuotes(InitialReels);
-                    GambleLimit = myData.message.maxGambleBet;
-                    PopulateSlotSocket(InitialReels);
+                    if (!SetInit)
+                    {
+                        Debug.Log(jsonObject);
+                        List<string> InitialReels = ConvertListOfListsToStrings(initialData.Reel);
+                        InitialReels = RemoveQuotes(InitialReels);
+                        PopulateSlotSocket(InitialReels);
+                        SetInit = true;
+                    }
+                    else
+                    {
+                        RefreshUI();
+                    }
                     break;
                 }
             case "ResultData":
@@ -284,6 +294,11 @@ public class SocketIOManager : MonoBehaviour
                 }
                 
         }
+    }
+
+    private void RefreshUI()
+    {
+        uiManager.InitialiseUIData(initUIData.AbtLogo.link, initUIData.AbtLogo.logoSprite, initUIData.ToULink, initUIData.PopLink, initUIData.paylines);
     }
 
     private void PopulateSlotSocket(List<string> slotPop)
