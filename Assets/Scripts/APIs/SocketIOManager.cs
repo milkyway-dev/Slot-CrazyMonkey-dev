@@ -37,7 +37,7 @@ public class SocketIOManager : MonoBehaviour
     internal JSHandler _jsManager;
 
     protected string SocketURI = null;
-    protected string TestSocketURI = "https://dev.casinoparadize.com";
+    protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
     //protected string SocketURI = "https://7p68wzhv-5000.inc1.devtunnels.ms/";
 
     [SerializeField]
@@ -251,6 +251,7 @@ public class SocketIOManager : MonoBehaviour
                     initUIData = myData.message.UIData;
                     playerdata = myData.message.PlayerData;
                     bonusdata = myData.message.BonusData;
+                    GambleLimit = myData.message.maxGambleBet;
                     if (!SetInit)
                     {
                         Debug.Log(jsonObject);
