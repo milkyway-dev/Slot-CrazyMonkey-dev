@@ -199,7 +199,7 @@ public class SlotBehaviour : MonoBehaviour
 
     internal void SetInitialUI()
     {
-        BetCounter = SocketManager.initialData.Bets.Count - 1;
+        BetCounter = 0;
         if (LineBet_text) LineBet_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
         if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] * Lines).ToString();
         if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f2");
