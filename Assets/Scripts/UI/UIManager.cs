@@ -98,11 +98,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private SocketIOManager socketManager;
 
-    private void Awake()
-    {
-        if (Loading_Object) Loading_Object.SetActive(true);
-        StartCoroutine(LoadingRoutine());
-    }
+    //private void Awake()
+    //{
+    //    if (Loading_Object) Loading_Object.SetActive(true);
+    //    StartCoroutine(LoadingRoutine());
+    //}
 
     private IEnumerator LoadingRoutine()
     {
