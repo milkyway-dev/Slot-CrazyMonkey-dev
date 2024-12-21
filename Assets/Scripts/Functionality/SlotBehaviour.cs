@@ -9,118 +9,59 @@ using UnityEngine.UI;
 
 public class SlotBehaviour : MonoBehaviour
 {
-    [SerializeField]
-    private RectTransform mainContainer_RT;
-
     [Header("Sprites")]
-    [SerializeField]
-    private Sprite[] myImages;  //images taken initially
+    [SerializeField] private Sprite[] myImages;  //images taken initially
 
     [Header("Slot Images")]
-    [SerializeField]
-    private List<SlotImage> images;     //class to store total images
-    [SerializeField]
-    private List<SlotImage> Tempimages;     //class to store the result matrix
-
-    [Header("Slots Objects")]
-    [SerializeField]
-    private GameObject[] Slot_Objects;
-    [Header("Slots Elements")]
-    [SerializeField]
-    private LayoutElement[] Slot_Elements;
+    [SerializeField] private List<SlotImage> images;     //class to store total images
+    [SerializeField] private List<SlotImage> Tempimages;     //class to store the result matrix
 
     [Header("Slots Transforms")]
-    [SerializeField]
-    private Transform[] Slot_Transform;
-
-    [Header("Line Button Objects")]
-    [SerializeField]
-    private List<GameObject> StaticLine_Objects;
-
-
+    [SerializeField] private Transform[] Slot_Transform;
 
     [Header("Buttons")]
-    [SerializeField]
-    private Button SlotStart_Button;
-    [SerializeField]
-    private Button MaxBet_Button;
-    [SerializeField]
-    private Button AutoSpin_Button;
+    [SerializeField] private Button SlotStart_Button;
+    [SerializeField] private Button MaxBet_Button;
+    [SerializeField] private Button AutoSpin_Button;
     [SerializeField] private Button AutoSpinStop_Button;
     [SerializeField] private Button BetOne_button;
-
+    [SerializeField] private Button Turbo_Button;
+    [SerializeField] private Button StopSpin_Button;
 
     [Header("Animated Sprites")]
-    [SerializeField]
-    private Sprite[] Monkey_Sprite;
-    [SerializeField]
-    private Sprite[] Banana_Sprite;
-    [SerializeField]
-    private Sprite[] Uncle_Sprite;
-    [SerializeField]
-    private Sprite[] Bird_Sprite;
-    [SerializeField]
-    private Sprite[] Lion_Sprite;
-    [SerializeField]
-    private Sprite[] Rhino_Sprite;
-    [SerializeField]
-    private Sprite[] Crocodile_Sprite;
-    [SerializeField]
-    private Sprite[] Coconut_Sprite;
-    [SerializeField]
-    private Sprite[] Bonus_Sprite;
-    [SerializeField]
-    private Sprite[] Wild_Sprite;
+    [SerializeField] private Sprite[] Monkey_Sprite;
+    [SerializeField] private Sprite[] Banana_Sprite;
+    [SerializeField] private Sprite[] Uncle_Sprite;
+    [SerializeField] private Sprite[] Bird_Sprite;
+    [SerializeField] private Sprite[] Lion_Sprite;
+    [SerializeField] private Sprite[] Rhino_Sprite;
+    [SerializeField] private Sprite[] Crocodile_Sprite;
+    [SerializeField] private Sprite[] Coconut_Sprite;
+    [SerializeField] private Sprite[] Bonus_Sprite;
+    [SerializeField] private Sprite[] Wild_Sprite;
+    [SerializeField] Sprite[] TurboToggleSprites;
 
     [Header("Miscellaneous UI")]
-    [SerializeField]
-    private TMP_Text Balance_text;
-    [SerializeField]
-    private TMP_Text TotalBet_text;
-    [SerializeField]
-    private TMP_Text LineBet_text;
-    [SerializeField]
-    private TMP_Text TotalWin_text;
-   
+    [SerializeField] private TMP_Text Balance_text;
+    [SerializeField] private TMP_Text TotalBet_text;
+    [SerializeField] private TMP_Text LineBet_text;
+    [SerializeField] private TMP_Text TotalWin_text;
+
     [Header("Audio Management")]
     [SerializeField] private AudioController audioController;
-
-    int tweenHeight = 0;  //calculate the height at which tweening is done
-
-    [SerializeField]
-    private GameObject Image_Prefab;
-   
-
-    [SerializeField]
-    private PayoutCalculation PayCalculator;
-
+    [SerializeField] private PayoutCalculation PayCalculator;
+    [SerializeField] private List<ImageAnimation> TempList;  //stores the sprites whose animation is running at present 
+    [SerializeField] private int IconSizeFactor = 100;       //set this parameter according to the size of the icon and spacing
+    [SerializeField] int verticalVisibility = 3;
+    [SerializeField] private SocketIOManager SocketManager;
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private BonusController _bonusManager;
+    [SerializeField] private GambleController gambleController;
     private List<Tweener> alltweens = new List<Tweener>();
-
     private Tweener WinTween = null;
-
-    [SerializeField]
-    private List<ImageAnimation> TempList;  //stores the sprites whose animation is running at present 
-
-    [SerializeField]
-    private int IconSizeFactor = 100;       //set this parameter according to the size of the icon and spacing
-
+    int tweenHeight = 0;  //calculate the height at which tweening is done
+    private float SpinDelay=0.2f;
     private int numberOfSlots = 5;          //number of columns
-
-    [SerializeField]
-    int verticalVisibility = 3;
-
-    [SerializeField]
-    private SocketIOManager SocketManager;
-    [SerializeField]
-    private UIManager uiManager;
-    [SerializeField]
-    private BonusController _bonusManager;
-
-    [SerializeField]
-    private GameObject Gamble;
-    [SerializeField]
-    private GambleController gambleController;
-
     Coroutine AutoSpinRoutine = null;
     Coroutine tweenroutine;
     Coroutine FreeSpinRoutine = null;
@@ -133,8 +74,9 @@ public class SlotBehaviour : MonoBehaviour
     private double currentBalance = 0;
     private double currentTotalBet = 0;
     internal double currentBet = 0;
-
+    private bool StopSpinToggle;
     protected int Lines = 9;
+    private bool IsTurboOn;
 
     private void Start()
     {
@@ -153,6 +95,12 @@ public class SlotBehaviour : MonoBehaviour
 
         if (AutoSpinStop_Button) AutoSpinStop_Button.onClick.RemoveAllListeners();
         if (AutoSpinStop_Button) AutoSpinStop_Button.onClick.AddListener(StopAutoSpin);
+
+        if(Turbo_Button) Turbo_Button.onClick.RemoveAllListeners();
+        if(Turbo_Button) Turbo_Button.onClick.AddListener(TurboToggle);
+
+        if(StopSpin_Button) StopSpin_Button.onClick.RemoveAllListeners();
+        if(StopSpin_Button) StopSpin_Button.onClick.AddListener(()=> {StopSpinToggle=true; StopSpin_Button.gameObject.SetActive(false);});
         tweenHeight = (15 * IconSizeFactor) - 280;
     }
 
@@ -160,20 +108,31 @@ public class SlotBehaviour : MonoBehaviour
     {
         if (!IsAutoSpin)
         {
-
             IsAutoSpin = true;
             if (AutoSpinStop_Button) AutoSpinStop_Button.gameObject.SetActive(true);
             if (AutoSpin_Button) AutoSpin_Button.gameObject.SetActive(false);
 
-            
             if (AutoSpinRoutine != null)
             {
                 StopCoroutine(AutoSpinRoutine);
                 AutoSpinRoutine = null;
-                
             }
             AutoSpinRoutine = StartCoroutine(AutoSpinCoroutine());
+        }
+    }
 
+    void TurboToggle(){
+        if(IsTurboOn){
+            IsTurboOn=false;
+            // Turbo_Button.GetComponent<ImageAnimation>().StopAnimation();
+            Turbo_Button.image.sprite=TurboToggleSprites[0];
+            // Turbo_Button.image.color=new Color(0.86f,0.86f,0.86f,1);
+        }
+        else{
+            IsTurboOn=true;
+            // Turbo_Button.GetComponent<ImageAnimation>().StartAnimation();
+            Turbo_Button.image.sprite=TurboToggleSprites[1];
+            // Turbo_Button.image.color=new Color(1,1,1,1);
         }
     }
 
@@ -231,8 +190,7 @@ public class SlotBehaviour : MonoBehaviour
         {
             StartSlots(IsAutoSpin);
             yield return tweenroutine;
-
-
+            yield return new WaitForSeconds(SpinDelay);
         }
     }
 
@@ -437,6 +395,9 @@ public class SlotBehaviour : MonoBehaviour
         CheckSpinAudio = true;
         IsSpinning = true;
         ToggleButtonGrp(false);
+        if(!IsTurboOn && !IsFreeSpin && !IsAutoSpin){
+            StopSpin_Button.gameObject.SetActive(true);
+        }
         for (int i = 0; i < numberOfSlots; i++)
         {
             InitializeTweening(Slot_Transform[i]);
@@ -448,7 +409,6 @@ public class SlotBehaviour : MonoBehaviour
             BalanceDeduction();
         }
         SocketManager.AccumulateResult(BetCounter);
-        print("before result");
         yield return new WaitUntil(() => SocketManager.isResultdone);
 
         for (int j = 0; j < SocketManager.resultData.ResultReel.Count; j++)
@@ -460,8 +420,20 @@ public class SlotBehaviour : MonoBehaviour
                 PopulateAnimationSprites(images[i].slotImages[images[i].slotImages.Count - 5 + j].gameObject.GetComponent<ImageAnimation>(), resultnum[i]);
             }
         }
-
-        yield return new WaitForSeconds(0.5f);
+        if(IsTurboOn){
+            yield return new WaitForSeconds(0.1f);
+        }
+        else{
+            for(int i=0;i<10;i++)
+            {
+                yield return new WaitForSeconds(0.1f);
+                if(StopSpinToggle){
+                    StopSpinToggle=false;
+                    break;
+                }
+            }
+            StopSpin_Button.gameObject.SetActive(false);
+        }
 
         for (int i = 0; i < numberOfSlots; i++)
         {
@@ -470,9 +442,15 @@ public class SlotBehaviour : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);
 
+        if(SocketManager.playerdata.currentWining>0){
+            SpinDelay=1.2f;
+        }
+        else{
+            SpinDelay=0.2f;
+        }
+
         CheckPayoutLineBackend(SocketManager.resultData.linesToEmit, SocketManager.resultData.FinalsymbolsToEmit, SocketManager.resultData.jackpot);
         KillAllTweens();
-
 
         CheckPopups = true;
 
