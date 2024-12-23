@@ -6096,7 +6096,6 @@ GameObject:
   m_Component:
   - component: {fileID: 500036491}
   - component: {fileID: 500036492}
-  - component: {fileID: 500036493}
   m_Layer: 0
   m_Name: SocketManager
   m_TagString: Untagged
@@ -6135,18 +6134,6 @@ MonoBehaviour:
   uiManager: {fileID: 377874625}
   bonusdata: []
   testToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZjI4NTgyNmUxNWVlNzkwZGY4MzQwNCIsInVzZXJuYW1lIjoidmFpYmhhdiIsInJvbGUiOiJwbGF5ZXIiLCJpYXQiOjE3MzQ3NTQ1MzIsImV4cCI6MTczNTM1OTMzMn0.Ayw9c-4Es291Frfawc18bR013j7pINBFfgp2TjOIsFE
---- !u!114 &500036493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 500036490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93ebd9f5c201749cbbd9553f4b3a076a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &512334774
 GameObject:
   m_ObjectHideFlags: 0
