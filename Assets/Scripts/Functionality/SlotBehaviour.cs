@@ -39,7 +39,7 @@ public class SlotBehaviour : MonoBehaviour
     [SerializeField] private Sprite[] Coconut_Sprite;
     [SerializeField] private Sprite[] Bonus_Sprite;
     [SerializeField] private Sprite[] Wild_Sprite;
-    [SerializeField] Sprite[] TurboToggleSprites;
+    [SerializeField] private Sprite TurboToggleSprite;
 
     [Header("Miscellaneous UI")]
     [SerializeField] private TMP_Text Balance_text;
@@ -124,15 +124,12 @@ public class SlotBehaviour : MonoBehaviour
     void TurboToggle(){
         if(IsTurboOn){
             IsTurboOn=false;
-            // Turbo_Button.GetComponent<ImageAnimation>().StopAnimation();
-            Turbo_Button.image.sprite=TurboToggleSprites[0];
-            // Turbo_Button.image.color=new Color(0.86f,0.86f,0.86f,1);
+            Turbo_Button.GetComponent<ImageAnimation>().StopAnimation();
+            Turbo_Button.image.sprite=TurboToggleSprite;
         }
         else{
             IsTurboOn=true;
-            // Turbo_Button.GetComponent<ImageAnimation>().StartAnimation();
-            Turbo_Button.image.sprite=TurboToggleSprites[1];
-            // Turbo_Button.image.color=new Color(1,1,1,1);
+            Turbo_Button.GetComponent<ImageAnimation>().StartAnimation();
         }
     }
 
@@ -164,8 +161,8 @@ public class SlotBehaviour : MonoBehaviour
         BetCounter = 0;
         if (LineBet_text) LineBet_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
         if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] * Lines).ToString();
-        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f2");
-        if (TotalWin_text) TotalWin_text.text = "0.00";
+        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f3");
+        if (TotalWin_text) TotalWin_text.text = "0.000";
         currentBalance = SocketManager.playerdata.Balance;
         currentTotalBet = SocketManager.initialData.Bets[BetCounter] * Lines;
         uiManager.InitialiseUIData(SocketManager.initUIData.AbtLogo.link, SocketManager.initUIData.AbtLogo.logoSprite, SocketManager.initUIData.ToULink, SocketManager.initUIData.PopLink, SocketManager.initUIData.paylines);
@@ -428,7 +425,6 @@ public class SlotBehaviour : MonoBehaviour
             {
                 yield return new WaitForSeconds(0.1f);
                 if(StopSpinToggle){
-                    StopSpinToggle=false;
                     break;
                 }
             }
@@ -437,10 +433,11 @@ public class SlotBehaviour : MonoBehaviour
 
         for (int i = 0; i < numberOfSlots; i++)
         {
-            yield return StopTweening(5, Slot_Transform[i], i);
+            yield return StopTweening(5, Slot_Transform[i], i, StopSpinToggle);
         }
-
-        yield return new WaitForSeconds(0.3f);
+        StopSpinToggle=false;
+        yield return alltweens[^1].WaitForCompletion();
+        KillAllTweens();
 
         if(SocketManager.playerdata.currentWining>0){
             SpinDelay=1.2f;
@@ -450,13 +447,12 @@ public class SlotBehaviour : MonoBehaviour
         }
 
         CheckPayoutLineBackend(SocketManager.resultData.linesToEmit, SocketManager.resultData.FinalsymbolsToEmit, SocketManager.resultData.jackpot);
-        KillAllTweens();
 
         CheckPopups = true;
 
-        if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString("f2");
+        if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString("f3");
 
-        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f2");
+        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f3");
 
         currentBalance = SocketManager.playerdata.Balance;
 
@@ -476,7 +472,7 @@ public class SlotBehaviour : MonoBehaviour
         else
         {
             ActivateGamble();
-            yield return new WaitForSeconds(2f);
+            // yield return new WaitForSeconds(0.1f);
             IsSpinning = false;
         }
     }
@@ -523,7 +519,7 @@ public class SlotBehaviour : MonoBehaviour
 
         DOTween.To(() => initAmount, (val) => initAmount = val, balance, 0.8f).OnUpdate(() =>
         {
-            if (Balance_text) Balance_text.text = initAmount.ToString("f2");
+            if (Balance_text) Balance_text.text = initAmount.ToString("f3");
         });
     }
 
@@ -568,8 +564,8 @@ public class SlotBehaviour : MonoBehaviour
 
     internal void updateBalance()
     {
-        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f2");
-        if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString("f2");
+        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f3");
+        if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString("f3");
     }
 
     //start the icons animation
@@ -657,13 +653,18 @@ public class SlotBehaviour : MonoBehaviour
 
 
 
-    private IEnumerator StopTweening(int reqpos, Transform slotTransform, int index)
+    private IEnumerator StopTweening(int reqpos, Transform slotTransform, int index, bool isStop=false)
     {
         alltweens[index].Pause();
         int tweenpos = (reqpos * IconSizeFactor) - IconSizeFactor;
         alltweens[index] = slotTransform.DOLocalMoveY(-tweenpos + 100, 0.5f).SetEase(Ease.OutElastic);
 
-        yield return new WaitForSeconds(0.2f);
+        if(!isStop){
+            yield return new WaitForSeconds(0.2f);  
+        }
+        else{
+            yield return null;
+        }
     }
 
 

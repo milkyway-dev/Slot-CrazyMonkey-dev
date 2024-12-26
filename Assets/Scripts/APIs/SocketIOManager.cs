@@ -40,7 +40,6 @@ public class SocketIOManager : MonoBehaviour
 
     internal bool SetInit = false;
 
-    //protected string gameID = "";
     // protected string gameID = "";
     protected string gameID = "SL-CRM";
 
