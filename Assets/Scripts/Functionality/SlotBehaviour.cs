@@ -102,7 +102,7 @@ public class SlotBehaviour : MonoBehaviour
         if(Turbo_Button) Turbo_Button.onClick.AddListener(TurboToggle);
 
         if(StopSpin_Button) StopSpin_Button.onClick.RemoveAllListeners();
-        if(StopSpin_Button) StopSpin_Button.onClick.AddListener(()=> {StopSpinToggle=true; StopSpin_Button.gameObject.SetActive(false);});
+        if(StopSpin_Button) StopSpin_Button.onClick.AddListener(()=> {audioController.PlayButtonAudio(); StopSpinToggle=true; StopSpin_Button.gameObject.SetActive(false);});
         tweenHeight = (15 * IconSizeFactor) - 280;
     }
 
@@ -124,6 +124,7 @@ public class SlotBehaviour : MonoBehaviour
     }
 
     void TurboToggle(){
+        audioController.PlayButtonAudio();
         if(IsTurboOn){
             IsTurboOn=false;
             Turbo_Button.GetComponent<ImageAnimation>().StopAnimation();
@@ -423,7 +424,7 @@ public class SlotBehaviour : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         else{
-            for(int i=0;i<10;i++)
+            for(int i=0;i<5;i++)
             {
                 yield return new WaitForSeconds(0.1f);
                 if(StopSpinToggle){
