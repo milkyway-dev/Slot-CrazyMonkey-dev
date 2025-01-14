@@ -449,24 +449,16 @@ public class SlotBehaviour : MonoBehaviour
         else{
             SpinDelay=0.2f;
         }
-
         CheckPayoutLineBackend(SocketManager.resultData.linesToEmit, SocketManager.resultData.FinalsymbolsToEmit, SocketManager.resultData.jackpot);
-
-        CheckPopups = true;
-
-        if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString("f3");
-
-        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f3");
-
         currentBalance = SocketManager.playerdata.Balance;
-
         currentBet = SocketManager.initialData.Bets[BetCounter];
-
         yield return new WaitForSeconds(0.5f);
+        CheckPopups = true;
         CheckBonusGame();
-
-        print("checkpopups, " + CheckPopups);
+        // print("checkpopups, " + CheckPopups);
         yield return new WaitUntil(() => !CheckPopups);
+        if (TotalWin_text) TotalWin_text.text = SocketManager.playerdata.currentWining.ToString("f3");
+        if (Balance_text) Balance_text.text = SocketManager.playerdata.Balance.ToString("f3");
         if (!IsAutoSpin)
         {
             ActivateGamble();
